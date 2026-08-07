@@ -4,11 +4,13 @@ import type { Pokemon } from '../../types/types'
 import { getTypeInfo } from '../global/hook/TYPES'
 import PillType from '../global/PillType.vue'
 import { useFavoritesStore } from '@/store/favorites.store'
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   pokemon: Pokemon
 }>()
 
+const router = useRouter()
 const favoritesStore = useFavoritesStore()
 const typeComputed = computed(() =>
   getTypeInfo(props.pokemon.types[0].toLowerCase()),
@@ -24,6 +26,10 @@ const headerStyle = computed(() => ({
 const toggleFavorite = () => {
   favoritesStore.toggleFavorite(props.pokemon)
 }
+
+const goToDetails = (name: string) => {
+  router.push(`${name.toLocaleLowerCase()}/details`)
+}
 </script>
 
 <template>
@@ -38,7 +44,11 @@ const toggleFavorite = () => {
     >
       {{ isFavorite ? 'favorite' : 'favorite_border' }}
     </button>
-    <section class="card-header" :style="headerStyle">
+    <section
+      class="card-header"
+      :style="headerStyle"
+      @click="goToDetails(pokemon.name)"
+    >
       <img
         class="card-header__bg"
         :src="typeComputed.image"

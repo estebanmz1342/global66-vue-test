@@ -62,7 +62,7 @@ export const mapPokemonDetailToPokemon = (value: unknown): Pokemon => {
     name: value.name.charAt(0).toUpperCase() + value.name.slice(1),
     image,
     types: value.types.map((item) => item.type.name),
-    height: value.height,
-    weight: value.weight,
+    height: value.height / 10,
+    weight: value.weight / 10,
   }
 }

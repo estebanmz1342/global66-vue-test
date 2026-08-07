@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { useOutsideClick } from '@/utils/use-outside-click'
 import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
+const route = useRoute()
 const isMenuVisible = ref<boolean>(false)
 const menuElement = ref()
 const menuButtonPosition = ref()
@@ -71,6 +72,8 @@ const visible = computed(() => ({
   'menu-elements--visible': isMenuVisible.value,
 }))
 
+const isActiveRoute = (path: string) => route.path === path
+
 const handleSelection = (path: string) => {
   router.push(path)
   isMenuVisible.value = false
@@ -94,15 +97,17 @@ useOutsideClick({
     <teleport v-if="parentComponent" :to="parentComponent">
       <section ref="menuElement" class="menu-elements" :class="visible">
         <ul class="menu-list">
-          <ol
-            v-for="route in routes"
-            :key="route.name"
+          <li
+            v-for="menuItem in routes"
+            :key="menuItem.name"
             class="menu-list-item"
-            @click="handleSelection(route.path)"
+            :class="{ 'menu-list-item--active': isActiveRoute(menuItem.path) }"
+            :aria-current="isActiveRoute(menuItem.path) ? 'page' : undefined"
+            @click="handleSelection(menuItem.path)"
           >
-            <span class="material-symbols-rounded">{{ route.icon }}</span>
-            <p>{{ route.name }}</p>
-          </ol>
+            <span class="material-symbols-rounded">{{ menuItem.icon }}</span>
+            <p>{{ menuItem.name }}</p>
+          </li>
         </ul>
       </section>
     </teleport>
@@ -156,19 +161,29 @@ useOutsideClick({
   padding: 0.425rem 0.75rem;
   gap: 0.625rem;
   border-radius: 12px;
-  box-shadow:
-    0 24px 80px rgba(168, 168, 168, 0.28),
-    0 2px 8px rgba(180, 180, 180, 0.08);
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.menu-list-item--active {
+  background-color: rgba(30, 136, 229, 0.12);
+  color: #1e88e5;
+  box-shadow: inset 0 0 0 1px rgba(30, 136, 229, 0.18);
 }
 
 .menu-button:hover {
   box-shadow: 0px 1px 76px 0px rgba(0, 0, 0, 0.35);
   -webkit-box-shadow: 0px 1px 76px 0px rgba(0, 0, 0, 0.35);
   transition: all 0.3s;
+  cursor: pointer;
 }
 
-.menu-button:hover,
 .menu-list-item:hover {
   cursor: pointer;
+  box-shadow: 0px 1px 76px 0px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0px 1px 76px 0px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
 }
 </style>

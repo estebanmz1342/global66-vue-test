@@ -1,4 +1,5 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 import { usePokeApi } from '@/api/composables/usePokeApi'
 import { useGlobalStore } from '@/store/global.store'
@@ -15,6 +16,7 @@ type Timer = ReturnType<typeof setTimeout>
 export const usePokedex = () => {
   const pokeApi = usePokeApi()
   const globalStore = useGlobalStore()
+  const router = useRouter()
   const pokemons = ref<Pokemon[]>([])
   const initialPokemons = ref<Pokemon[]>([])
   const searchValue = ref('')
@@ -69,6 +71,7 @@ export const usePokedex = () => {
       console.error('Error fetching pokemons:', error)
       pokemons.value = []
       initialPokemons.value = []
+      router.push('/error')
     }
   }
 
@@ -100,6 +103,7 @@ export const usePokedex = () => {
     } catch (error) {
       console.error('Error fetching pokemon by name:', error)
       pokemons.value = []
+      router.push('/error')
       return undefined
     } finally {
       isSearching.value = false

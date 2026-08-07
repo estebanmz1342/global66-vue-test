@@ -20,7 +20,7 @@ defineProps<{
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1rem;
+  gap: 2rem;
   margin: 1rem auto;
 }
 </style>

@@ -1,36 +1,32 @@
 <script lang="ts" setup>
-import { onBeforeUnmount, onMounted } from 'vue'
-
+import List from '@/components/pokedex/List.vue'
+import SearchAndFilter from '@/components/pokedex/SearchAndFilter.vue'
 import Slider from '../components/onboarding/Slider.vue'
-import { globalStore } from '../store/global.store'
+import { usePokedex } from '@/components/pokedex/hooks/usePokedex'
 
-const LOADING_DELAY_MS = 1900
-
-let loadingTimer: ReturnType<typeof window.setTimeout> | undefined
-
-onMounted(() => {
-  globalStore.setLoading(true)
-
-  loadingTimer = window.setTimeout(() => {
-    globalStore.setLoading(false)
-  }, LOADING_DELAY_MS)
-})
-
-onBeforeUnmount(() => {
-  if (loadingTimer) {
-    window.clearTimeout(loadingTimer)
-  }
-
-  globalStore.setLoading(false)
-})
+const {
+  finishOnboarding,
+  handleSearch,
+  isOnboardingFinished,
+  pokemons,
+  searchValue,
+} = usePokedex()
 </script>
 
 <template>
-  <div>POKEDEX</div>
-  <Slider
-    v-if="!globalStore.isOnboardingFinished"
-    @finish="globalStore.setOnboardingFinished(true)"
-  />
+  <div class="pokedex">
+    <SearchAndFilter v-model="searchValue" @search="handleSearch" />
+    <List :pokemons="pokemons" />
+    <Slider v-if="!isOnboardingFinished" @finish="finishOnboarding" />
+  </div>
 </template>
 
-<style></style>
+<style scoped>
+.pokedex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 0;
+}
+</style>

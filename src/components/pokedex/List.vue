@@ -9,7 +9,7 @@ defineProps<{
   <div class="list">
     <Card
       v-for="(pokemon, index) in pokemons"
-      :key="index"
+      :key="pokemon.id ?? index"
       :pokemon="pokemon"
     />
   </div>

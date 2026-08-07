@@ -23,17 +23,22 @@ const readPersistedFavorites = (): Pokemon[] => {
       return []
     }
 
-    return parsedState.filter((pokemon): pokemon is Pokemon => {
-      return (
-        typeof pokemon === 'object' &&
-        pokemon !== null &&
-        'id' in pokemon &&
-        'name' in pokemon &&
-        'image' in pokemon &&
-        'number' in pokemon &&
-        'types' in pokemon
-      )
-    })
+    return parsedState
+      .filter((pokemon): pokemon is Pokemon => {
+        return (
+          typeof pokemon === 'object' &&
+          pokemon !== null &&
+          'id' in pokemon &&
+          'name' in pokemon &&
+          'image' in pokemon &&
+          'number' in pokemon &&
+          'types' in pokemon
+        )
+      })
+      .map((pokemon) => ({
+        ...pokemon,
+        ability: typeof pokemon.ability === 'string' ? pokemon.ability : '-',
+      }))
   } catch {
     return []
   }

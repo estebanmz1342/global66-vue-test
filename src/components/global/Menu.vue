@@ -19,12 +19,12 @@ const routes = [
     icon: 'home',
   },
   {
-    name: 'Favorites',
+    name: 'Favoritos',
     path: '/favorites',
     icon: 'favorite',
   },
   {
-    name: 'Regions',
+    name: 'Regiones',
     path: '/regions',
     icon: 'language',
   },

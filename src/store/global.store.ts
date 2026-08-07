@@ -3,7 +3,6 @@ import { ref, watch } from 'vue'
 
 type GlobalStoreState = {
   isOnboardingFinished: boolean
-  isLoading: boolean
 }
 
 const STORAGE_KEY = 'global66-vue-test:global-store'
@@ -27,10 +26,6 @@ const readPersistedState = (): Partial<GlobalStoreState> => {
         typeof parsedState.isOnboardingFinished === 'boolean'
           ? parsedState.isOnboardingFinished
           : undefined,
-      isLoading:
-        typeof parsedState.isLoading === 'boolean'
-          ? parsedState.isLoading
-          : undefined,
     }
   } catch {
     return {}
@@ -49,7 +44,7 @@ export const useGlobalStore = defineStore('global', () => {
   const persistedState = readPersistedState()
 
   const isOnboardingFinished = ref(persistedState.isOnboardingFinished ?? false)
-  const isLoading = ref(persistedState.isLoading ?? false)
+  const isLoading = ref(false)
 
   const setOnboardingFinished = (value: boolean) => {
     isOnboardingFinished.value = value
@@ -60,11 +55,10 @@ export const useGlobalStore = defineStore('global', () => {
   }
 
   watch(
-    [isOnboardingFinished, isLoading],
-    ([onboardingFinished, loading]) => {
+    isOnboardingFinished,
+    (onboardingFinished) => {
       persistState({
         isOnboardingFinished: onboardingFinished,
-        isLoading: loading,
       })
     },
     {

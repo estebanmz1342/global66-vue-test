@@ -3,20 +3,40 @@ import List from '@/components/pokedex/List.vue'
 import SearchAndFilter from '@/components/pokedex/SearchAndFilter.vue'
 import Slider from '../components/onboarding/Slider.vue'
 import { usePokedex } from '@/components/pokedex/hooks/usePokedex'
+import { onBeforeUnmount, onMounted } from 'vue'
 
 const {
   finishOnboarding,
   handleSearch,
   isOnboardingFinished,
+  hasMorePokemons,
+  isLoadingMore,
+  loadMorePokemons,
   pokemons,
   searchValue,
+  fetchPokemons,
+  clearSearchTimer,
 } = usePokedex()
+
+onMounted(() => {
+  void fetchPokemons()
+})
+
+onBeforeUnmount(() => {
+  clearSearchTimer()
+})
 </script>
 
 <template>
   <div class="pokedex">
     <SearchAndFilter v-model="searchValue" @search="handleSearch" />
-    <List :pokemons="pokemons" />
+    <List
+      :pokemons="pokemons"
+      :show-load-more="true"
+      :has-more="hasMorePokemons"
+      :is-loading-more="isLoadingMore"
+      @load-more="loadMorePokemons"
+    />
     <Slider v-if="!isOnboardingFinished" @finish="finishOnboarding" />
   </div>
 </template>

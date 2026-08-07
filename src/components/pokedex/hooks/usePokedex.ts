@@ -1,4 +1,4 @@
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { usePokeApi } from '@/api/composables/usePokeApi'
@@ -7,7 +7,6 @@ import type { Pokemon } from '@/types/types'
 
 const INITIAL_LIMIT = 20
 const INITIAL_OFFSET = 0
-const LOADING_DELAY_MS = 1900
 const SEARCH_DEBOUNCE_MS = 1000
 const MIN_SEARCH_LENGTH = 3
 
@@ -21,21 +20,16 @@ export const usePokedex = () => {
   const initialPokemons = ref<Pokemon[]>([])
   const searchValue = ref('')
   const isSearching = ref(false)
+  const isLoadingMore = ref(false)
+  const hasMorePokemons = ref(true)
+  const currentOffset = ref(INITIAL_OFFSET)
 
-  let loadingTimer: Timer | undefined
   let searchTimer: Timer | undefined
 
   const isOnboardingFinished = computed(() => globalStore.isOnboardingFinished)
   const canSearch = computed(
     () => searchValue.value.trim().length >= MIN_SEARCH_LENGTH,
   )
-
-  const clearLoadingTimer = () => {
-    if (loadingTimer) {
-      clearTimeout(loadingTimer)
-      loadingTimer = undefined
-    }
-  }
 
   const clearSearchTimer = () => {
     if (searchTimer) {
@@ -52,17 +46,16 @@ export const usePokedex = () => {
     limit = INITIAL_LIMIT,
     offset = INITIAL_OFFSET,
   ) => {
-    globalStore.setLoading(true)
-    clearLoadingTimer()
-
-    loadingTimer = setTimeout(() => {
-      globalStore.setLoading(false)
-    }, LOADING_DELAY_MS)
+    hasMorePokemons.value = true
+    currentOffset.value = offset
 
     try {
-      const fetchedPokemons = await pokeApi.getPokemons(limit, offset)
+      const { pokemons: fetchedPokemons, hasMore, nextOffset } =
+        await pokeApi.getPokemonBatch(limit, offset)
       initialPokemons.value = fetchedPokemons
       pokemons.value = fetchedPokemons
+      hasMorePokemons.value = hasMore
+      currentOffset.value = nextOffset ?? offset + fetchedPokemons.length
 
       if (searchValue.value.trim().length >= MIN_SEARCH_LENGTH) {
         await getPokemonByName(searchValue.value)
@@ -72,6 +65,35 @@ export const usePokedex = () => {
       pokemons.value = []
       initialPokemons.value = []
       router.push('/error')
+    }
+  }
+
+  const loadMorePokemons = async (limit = INITIAL_LIMIT) => {
+    if (isLoadingMore.value || !hasMorePokemons.value) {
+      return
+    }
+
+    isLoadingMore.value = true
+
+    try {
+      const { pokemons: fetchedPokemons, hasMore, nextOffset } =
+        await pokeApi.getPokemonBatch(limit, currentOffset.value)
+
+      initialPokemons.value = [...initialPokemons.value, ...fetchedPokemons]
+      hasMorePokemons.value = hasMore
+      currentOffset.value = nextOffset ?? currentOffset.value + fetchedPokemons.length
+
+      if (searchValue.value.trim().length >= MIN_SEARCH_LENGTH) {
+        await getPokemonByName(searchValue.value)
+        return
+      }
+
+      restoreInitialPokemons()
+    } catch (error) {
+      console.error('Error loading more pokemons:', error)
+      router.push('/error')
+    } finally {
+      isLoadingMore.value = false
     }
   }
 
@@ -142,16 +164,6 @@ export const usePokedex = () => {
     }, SEARCH_DEBOUNCE_MS)
   })
 
-  onMounted(() => {
-    void fetchPokemons()
-  })
-
-  onBeforeUnmount(() => {
-    clearLoadingTimer()
-    clearSearchTimer()
-    globalStore.setLoading(false)
-  })
-
   return {
     canSearch,
     fetchPokemons,
@@ -160,7 +172,11 @@ export const usePokedex = () => {
     finishOnboarding,
     isOnboardingFinished,
     isSearching,
+    isLoadingMore,
+    hasMorePokemons,
+    loadMorePokemons,
     pokemons,
     searchValue,
+    clearSearchTimer,
   }
 }

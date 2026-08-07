@@ -1,14 +1,30 @@
 <script lang="ts" setup>
-defineProps<{
-  variant?: 'primary' | 'secondary'
-}>()
+withDefaults(
+  defineProps<{
+    variant?: 'primary' | 'secondary'
+    type?: 'button' | 'submit' | 'reset'
+    disabled?: boolean
+  }>(),
+  {
+    variant: 'primary',
+    type: 'button',
+    disabled: false,
+  },
+)
+
 defineEmits<{
   (e: 'click'): void
 }>()
 </script>
 
 <template>
-  <button class="button" :class="variant" @click="$emit('click')">
+  <button
+    class="button"
+    :class="variant"
+    :type="type"
+    :disabled="disabled"
+    @click="$emit('click')"
+  >
     <slot />
   </button>
 </template>
@@ -40,5 +56,10 @@ defineEmits<{
 
 .button:hover {
   cursor: pointer;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 </style>

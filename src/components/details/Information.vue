@@ -1,19 +1,24 @@
 <script lang="ts" setup>
-import type { Pokemon } from '@/types/types'
-import Title from '../global/Title.vue'
-import PillType from '../global/PillType.vue'
+import { computed, ref } from 'vue'
+
 import Attribute from '../global/Attribute.vue'
 import GenderDistribution from '../global/GenderDistribution.vue'
-import { ref } from 'vue'
+import PillType from '../global/PillType.vue'
+import Title from '../global/Title.vue'
+import type { Pokemon } from '@/types/types'
+import { calculatePokemonWeaknesses } from '@/utils/pokemon-weaknesses'
 
-defineProps<{
+const props = defineProps<{
   pokemon: Pokemon
 }>()
+
+const pokemon = computed(() => props.pokemon)
 const description = ref<string>('')
 const category = ref<string>('-')
-const ability = ref<string>('-')
 const femalePercentage = ref<number | undefined>()
-const debilities = ref<string[]>([])
+const weaknesses = computed(() =>
+  calculatePokemonWeaknesses(pokemon.value.types),
+)
 </script>
 
 <template>
@@ -46,23 +51,22 @@ const debilities = ref<string[]>([])
         <Attribute
           icon="filter_tilt_shift"
           label="Habilidad"
-          :value="ability"
+          :value="pokemon.ability"
         />
       </div>
 
-      <p v-if="!femalePercentage">Información de género no disponible</p>
-      <GenderDistribution
-        v-else
-        :female-percentage="femalePercentage as number"
-      />
+      <p v-if="femalePercentage === undefined">
+        Información de género no disponible
+      </p>
+      <GenderDistribution v-else :female-percentage="femalePercentage" />
     </section>
     <hr />
-    <section class="info-section debilibilities">
-      <h3 class="debilibilities-title">Debilidades</h3>
-      <p v-if="!debilities.length">Informacion no disponible</p>
+    <section class="info-section weaknesses">
+      <h3 class="weaknesses-title">Debilidades</h3>
+      <p v-if="!weaknesses.length">Informacion no disponible</p>
       <div v-else class="deb__types">
         <PillType
-          v-for="(type, index) in pokemon.types"
+          v-for="(type, index) in weaknesses"
           :key="index"
           :type="type"
           size="large"
@@ -131,18 +135,19 @@ const debilities = ref<string[]>([])
   gap: 1.125rem;
 }
 
-.debilibilities.info-section {
+.weaknesses.info-section {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding-top: 1rem;
 }
 
-.debilibilities .deb__types {
+.weaknesses .deb__types {
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.debilibilities-title {
+.weaknesses-title {
   font-family: Poppins;
   font-weight: 600;
   font-size: 1.125rem;

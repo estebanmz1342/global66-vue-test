@@ -23,6 +23,14 @@ export interface PokemonDetailApiResponse {
       }
     }
   }
+  abilities: {
+    is_hidden: boolean
+    slot: number
+    ability: {
+      name: string
+      url: string
+    }
+  }[]
   types: {
     slot: number
     type: {

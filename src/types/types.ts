@@ -4,6 +4,7 @@ export interface Pokemon {
   name: string
   image: string
   types: string[]
+  ability: string
   height: number
   weight: number
 }

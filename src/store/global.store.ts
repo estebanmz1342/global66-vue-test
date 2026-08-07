@@ -1,4 +1,5 @@
-import { reactive } from 'vue'
+import { defineStore } from 'pinia'
+import { ref, watch } from 'vue'
 
 type GlobalStoreState = {
   isOnboardingFinished: boolean
@@ -44,27 +45,37 @@ const persistState = (state: GlobalStoreState) => {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
 }
 
-export const globalStore = reactive<
-  GlobalStoreState & {
-    setOnboardingFinished: (value: boolean) => void
-    setLoading: (value: boolean) => void
+export const useGlobalStore = defineStore('global', () => {
+  const persistedState = readPersistedState()
+
+  const isOnboardingFinished = ref(persistedState.isOnboardingFinished ?? false)
+  const isLoading = ref(persistedState.isLoading ?? false)
+
+  const setOnboardingFinished = (value: boolean) => {
+    isOnboardingFinished.value = value
   }
->({
-  isOnboardingFinished: false,
-  isLoading: false,
-  ...readPersistedState(),
-  setOnboardingFinished(value: boolean) {
-    this.isOnboardingFinished = value
-    persistState({
-      isOnboardingFinished: this.isOnboardingFinished,
-      isLoading: this.isLoading,
-    })
-  },
-  setLoading(value: boolean) {
-    this.isLoading = value
-    persistState({
-      isOnboardingFinished: this.isOnboardingFinished,
-      isLoading: this.isLoading,
-    })
-  },
+
+  const setLoading = (value: boolean) => {
+    isLoading.value = value
+  }
+
+  watch(
+    [isOnboardingFinished, isLoading],
+    ([onboardingFinished, loading]) => {
+      persistState({
+        isOnboardingFinished: onboardingFinished,
+        isLoading: loading,
+      })
+    },
+    {
+      immediate: true,
+    },
+  )
+
+  return {
+    isOnboardingFinished,
+    isLoading,
+    setOnboardingFinished,
+    setLoading,
+  }
 })

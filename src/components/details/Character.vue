@@ -82,7 +82,6 @@ const toggleFavorite = () => {
 .character-header {
   display: flex;
   width: 100%;
-  /* justify-content: flex-end; */
 }
 
 .character-header__bg {
@@ -106,25 +105,6 @@ const toggleFavorite = () => {
   top: -50px;
   z-index: 3;
 }
-
-/* .character-header__bg {
-  width: min(45%, 550px);
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  z-index: 2;
-  object-fit: cover;
-}
-
-.character-header__image {
-  width: min(30%, 280px);
-  aspect-ratio: 1 / 1;
-  padding-top: 135px;
-  margin: 0 auto;
-  z-index: 3;
-} */
 
 .favorite-button.is-favorite {
   color: #ef4444;

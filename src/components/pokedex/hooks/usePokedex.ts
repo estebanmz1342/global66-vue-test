@@ -7,7 +7,6 @@ import type { Pokemon } from '@/types/types'
 
 const INITIAL_LIMIT = 20
 const INITIAL_OFFSET = 0
-const LOADING_DELAY_MS = 1900
 const SEARCH_DEBOUNCE_MS = 1000
 const MIN_SEARCH_LENGTH = 3
 
@@ -25,20 +24,12 @@ export const usePokedex = () => {
   const hasMorePokemons = ref(true)
   const currentOffset = ref(INITIAL_OFFSET)
 
-  let loadingTimer: Timer | undefined
   let searchTimer: Timer | undefined
 
   const isOnboardingFinished = computed(() => globalStore.isOnboardingFinished)
   const canSearch = computed(
     () => searchValue.value.trim().length >= MIN_SEARCH_LENGTH,
   )
-
-  const clearLoadingTimer = () => {
-    if (loadingTimer) {
-      clearTimeout(loadingTimer)
-      loadingTimer = undefined
-    }
-  }
 
   const clearSearchTimer = () => {
     if (searchTimer) {
@@ -55,14 +46,8 @@ export const usePokedex = () => {
     limit = INITIAL_LIMIT,
     offset = INITIAL_OFFSET,
   ) => {
-    globalStore.setLoading(true)
-    clearLoadingTimer()
     hasMorePokemons.value = true
     currentOffset.value = offset
-
-    loadingTimer = setTimeout(() => {
-      globalStore.setLoading(false)
-    }, LOADING_DELAY_MS)
 
     try {
       const { pokemons: fetchedPokemons, hasMore, nextOffset } =
@@ -192,7 +177,6 @@ export const usePokedex = () => {
     loadMorePokemons,
     pokemons,
     searchValue,
-    clearLoadingTimer,
     clearSearchTimer,
   }
 }

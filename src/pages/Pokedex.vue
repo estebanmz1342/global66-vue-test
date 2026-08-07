@@ -4,7 +4,6 @@ import SearchAndFilter from '@/components/pokedex/SearchAndFilter.vue'
 import Slider from '../components/onboarding/Slider.vue'
 import { usePokedex } from '@/components/pokedex/hooks/usePokedex'
 import { onBeforeUnmount, onMounted } from 'vue'
-import { useGlobalStore } from '@/store/global.store.ts'
 
 const {
   finishOnboarding,
@@ -16,19 +15,15 @@ const {
   pokemons,
   searchValue,
   fetchPokemons,
-  clearLoadingTimer,
   clearSearchTimer,
 } = usePokedex()
-const globalStore = useGlobalStore()
 
 onMounted(() => {
   void fetchPokemons()
 })
 
 onBeforeUnmount(() => {
-  clearLoadingTimer()
   clearSearchTimer()
-  globalStore.setLoading(false)
 })
 </script>
 

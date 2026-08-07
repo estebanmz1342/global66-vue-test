@@ -3,22 +3,18 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import Character from '@/components/details/Character.vue'
 import { usePokedex } from '@/components/pokedex/hooks/usePokedex'
-import { useGlobalStore } from '@/store/global.store'
 import type { Pokemon } from '@/types/types'
 import Button from '@/components/global/Button.vue'
 import Information from '@/components/details/Information.vue'
 
 const route = useRoute()
-const globalStore = useGlobalStore()
 const { getPokemonByName } = usePokedex()
 const name = computed(() => route.params.name)
 const pokemon = ref<Pokemon | undefined>()
 
 onMounted(async () => {
-  globalStore.setLoading(true)
   const response = await getPokemonByName(name.value as string)
   pokemon.value = response
-  globalStore.setLoading(false)
 })
 </script>
 

@@ -2,6 +2,7 @@ import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { usePokeApi } from '@/api/composables/usePokeApi'
+import { usePokemonTypeApi } from '@/api/composables/usePokemonTypeApi'
 import { useGlobalStore } from '@/store/global.store'
 import type { Pokemon } from '@/types/types'
 
@@ -14,11 +15,14 @@ type Timer = ReturnType<typeof setTimeout>
 
 export const usePokedex = () => {
   const pokeApi = usePokeApi()
+  const pokemonTypeApi = usePokemonTypeApi()
   const globalStore = useGlobalStore()
   const router = useRouter()
   const pokemons = ref<Pokemon[]>([])
   const initialPokemons = ref<Pokemon[]>([])
+  const typeFilteredPokemons = ref<Pokemon[]>([])
   const searchValue = ref('')
+  const selectedTypes = ref<string[]>([])
   const isSearching = ref(false)
   const isLoadingMore = ref(false)
   const hasMorePokemons = ref(true)
@@ -40,6 +44,33 @@ export const usePokedex = () => {
 
   const restoreInitialPokemons = () => {
     pokemons.value = [...initialPokemons.value]
+  }
+
+  const restoreCurrentPokemons = () => {
+    pokemons.value =
+      selectedTypes.value.length > 0
+        ? [...typeFilteredPokemons.value]
+        : [...initialPokemons.value]
+  }
+
+  const normalizeTypes = (types: string[]) =>
+    Array.from(
+      new Set(types.map((type) => type.trim().toLowerCase()).filter(Boolean)),
+    )
+
+  const pokemonMatchesTypes = (pokemon: Pokemon, types: string[]) =>
+    types.length === 0 || types.some((type) => pokemon.types.includes(type))
+
+  const filterPokemonsByName = (pokemonsToFilter: Pokemon[], query: string) => {
+    const normalizedQuery = query.trim().toLowerCase()
+
+    if (normalizedQuery.length < MIN_SEARCH_LENGTH) {
+      return [...pokemonsToFilter]
+    }
+
+    return pokemonsToFilter.filter((pokemon) =>
+      pokemon.name.toLowerCase().includes(normalizedQuery),
+    )
   }
 
   const fetchPokemons = async (
@@ -110,23 +141,41 @@ export const usePokedex = () => {
     const normalizedName = name.trim().toLowerCase()
 
     if (normalizedName.length < MIN_SEARCH_LENGTH) {
-      restoreInitialPokemons()
+      restoreCurrentPokemons()
       return undefined
     }
 
     isSearching.value = true
 
     try {
-      const localMatches = initialPokemons.value.filter((pokemon) =>
-        pokemon.name.toLowerCase().includes(normalizedName),
-      )
+      const sourcePokemons =
+        selectedTypes.value.length > 0
+          ? typeFilteredPokemons.value
+          : initialPokemons.value
+
+      const localMatches = filterPokemonsByName(sourcePokemons, normalizedName)
 
       if (localMatches.length > 0) {
-        pokemons.value = localMatches
-        return localMatches[0]
+        const filteredMatches = selectedTypes.value.length
+          ? localMatches.filter((pokemon) =>
+              pokemonMatchesTypes(pokemon, selectedTypes.value),
+            )
+          : localMatches
+
+        pokemons.value = filteredMatches
+        return filteredMatches[0]
       }
 
       const searchedPokemon = await pokeApi.getPokemonDetails(normalizedName)
+
+      if (
+        selectedTypes.value.length > 0 &&
+        !pokemonMatchesTypes(searchedPokemon, selectedTypes.value)
+      ) {
+        pokemons.value = []
+        return undefined
+      }
+
       pokemons.value = [searchedPokemon]
       return searchedPokemon
     } catch (error) {
@@ -139,13 +188,55 @@ export const usePokedex = () => {
     }
   }
 
+  const applyTypeFilter = async (types: string[]) => {
+    const normalizedTypes = normalizeTypes(types)
+
+    clearSearchTimer()
+    selectedTypes.value = normalizedTypes
+
+    if (normalizedTypes.length === 0) {
+      typeFilteredPokemons.value = []
+      hasMorePokemons.value = true
+
+      if (searchValue.value.trim().length >= MIN_SEARCH_LENGTH) {
+        await getPokemonByName(searchValue.value)
+        return
+      }
+
+      restoreInitialPokemons()
+      return
+    }
+
+    isSearching.value = true
+
+    try {
+      const filteredPokemons =
+        await pokemonTypeApi.getPokemonsByTypes(normalizedTypes)
+      typeFilteredPokemons.value = filteredPokemons
+      hasMorePokemons.value = false
+
+      if (searchValue.value.trim().length >= MIN_SEARCH_LENGTH) {
+        await getPokemonByName(searchValue.value)
+        return
+      }
+
+      pokemons.value = [...filteredPokemons]
+    } catch (error) {
+      console.error('Error fetching pokemon by type:', error)
+      pokemons.value = []
+      router.push('/error')
+    } finally {
+      isSearching.value = false
+    }
+  }
+
   const handleSearch = () => {
     clearSearchTimer()
 
     const query = searchValue.value.trim()
 
     if (query.length < MIN_SEARCH_LENGTH) {
-      restoreInitialPokemons()
+      restoreCurrentPokemons()
       return
     }
 
@@ -162,7 +253,7 @@ export const usePokedex = () => {
     const query = searchValue.value.trim()
 
     if (query.length < MIN_SEARCH_LENGTH) {
-      restoreInitialPokemons()
+      restoreCurrentPokemons()
       return
     }
 
@@ -182,7 +273,9 @@ export const usePokedex = () => {
     isLoadingMore,
     hasMorePokemons,
     loadMorePokemons,
+    applyTypeFilter,
     pokemons,
+    selectedTypes,
     searchValue,
     clearSearchTimer,
   }

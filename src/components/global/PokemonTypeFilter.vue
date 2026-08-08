@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 
-import { TYPES, getTypeInfo } from '@/components/global/hook/TYPES'
+import { getTypeInfo, TYPES } from '@/components/global/hook/TYPES'
 
 const props = withDefaults(
   defineProps<{
@@ -86,7 +86,10 @@ const apply = () => {
               class="pokemon-type-filter__checkbox"
               :class="{ checked: isSelected(type.key) }"
             >
-              <span v-if="isSelected(type.key)" class="material-symbols-rounded">
+              <span
+                v-if="isSelected(type.key)"
+                class="material-symbols-rounded"
+              >
                 check
               </span>
             </span>

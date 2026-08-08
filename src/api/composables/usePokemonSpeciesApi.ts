@@ -1,5 +1,6 @@
 import { mapPokemonSpeciesToDetails } from '@/mappers/pokemonSpecies.mapper'
 import type { PokemonSpeciesDetails } from '@/types/pokemon-species.types'
+
 import { useServiceApi } from './useServiceApi'
 
 export const usePokemonSpeciesApi = () => {

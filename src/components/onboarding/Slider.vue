@@ -171,13 +171,15 @@ const finishSwipe = (event: PointerEvent) => {
 
 <style scoped>
 .slider {
-  width: min(100%, 27.5rem);
+  width: min(50%, 27.5rem);
   margin: 0 auto;
   padding: 1.25rem 1rem 1.5rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  height: 100vh;
 }
 
 .slider__viewport {

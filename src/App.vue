@@ -9,7 +9,7 @@ const globalStore = useGlobalStore()
 </script>
 
 <template>
-  <Menu />
+  <Menu v-if="globalStore.isOnboardingFinished" />
   <Loader v-if="globalStore.isLoading" />
   <RouterView />
 </template>

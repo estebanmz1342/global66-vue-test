@@ -28,7 +28,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="pokedex">
+  <div v-if="!isOnboardingFinished" class="pokemon">
+    <Slider @finish="finishOnboarding" />
+  </div>
+  <div v-else class="pokedex">
     <SearchAndFilter v-model="searchValue" @search="handleSearch" />
     <List
       :pokemons="pokemons"
@@ -37,7 +40,6 @@ onBeforeUnmount(() => {
       :is-loading-more="isLoadingMore"
       @load-more="loadMorePokemons"
     />
-    <Slider v-if="!isOnboardingFinished" @finish="finishOnboarding" />
   </div>
 </template>
 

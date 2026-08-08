@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+
+import { useFavoritesStore } from '@/store/favorites.store'
+
 import type { Pokemon } from '../../types/types'
 import { getTypeInfo } from '../global/hook/TYPES'
 import PillType from '../global/PillType.vue'
-import { useFavoritesStore } from '@/store/favorites.store'
-import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   pokemon: Pokemon

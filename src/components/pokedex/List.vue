@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import type { Pokemon } from '@/types/types.ts'
-import Card from './Card.vue'
 import Button from '@/components/global/Button.vue'
+import type { Pokemon } from '@/types/types'
+
+import Card from './Card.vue'
 
 withDefaults(
   defineProps<{

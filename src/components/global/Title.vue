@@ -11,7 +11,7 @@ defineProps<{
 
 <style scoped>
 .title {
-  font: var(--typography);
+  font-family: var(--typography);
   line-height: 100%;
   letter-spacing: 0em;
   text-align: center;

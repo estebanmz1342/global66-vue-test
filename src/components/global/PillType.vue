@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
+
 import { getTypeInfo } from './hook/TYPES'
 
 const props = defineProps<{

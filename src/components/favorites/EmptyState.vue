@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import emptyStateImage from '@/assets/magikarp.svg'
-import Title from '../global/Title.vue'
+
 import Text from '../global/Text.vue'
+import Title from '../global/Title.vue'
 </script>
 
 <template>

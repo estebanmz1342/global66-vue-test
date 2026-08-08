@@ -80,7 +80,15 @@ const TYPE_EFFECTIVENESS: Record<PokemonType, TypeEffectiveness> = {
   },
   bug: {
     strongAgainst: ['grass', 'psychic', 'dark'],
-    resistedBy: ['fire', 'fighting', 'poison', 'flying', 'ghost', 'steel', 'fairy'],
+    resistedBy: [
+      'fire',
+      'fighting',
+      'poison',
+      'flying',
+      'ghost',
+      'steel',
+      'fairy',
+    ],
   },
   rock: {
     strongAgainst: ['fire', 'ice', 'flying', 'bug'],

@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { useOutsideClick } from '@/utils/use-outside-click'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+
+import { useOutsideClick } from '@/utils/use-outside-click'
 
 const router = useRouter()
 const route = useRoute()

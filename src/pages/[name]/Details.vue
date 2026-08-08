@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+
 import Character from '@/components/details/Character.vue'
+import Information from '@/components/details/Information.vue'
+import Button from '@/components/global/Button.vue'
 import { usePokedex } from '@/components/pokedex/hooks/usePokedex'
 import type { Pokemon } from '@/types/types'
-import Button from '@/components/global/Button.vue'
-import Information from '@/components/details/Information.vue'
 
 const route = useRoute()
 const { getPokemonByName } = usePokedex()

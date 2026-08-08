@@ -2,8 +2,8 @@
 import { RouterView } from 'vue-router'
 
 import Loader from './components/global/Loader.vue'
-import { useGlobalStore } from './store/global.store'
 import Menu from './components/global/Menu.vue'
+import { useGlobalStore } from './store/global.store'
 
 const globalStore = useGlobalStore()
 </script>

@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import wipImage from '@/assets/jigglypuff.svg'
-import Title from '../global/Title.vue'
+
 import Text from '../global/Text.vue'
+import Title from '../global/Title.vue'
 </script>
 
 <template>

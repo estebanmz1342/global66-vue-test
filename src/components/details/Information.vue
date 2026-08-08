@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 
+import type { Pokemon } from '@/types/types'
+import { calculatePokemonWeaknesses } from '@/utils/pokemon-weaknesses'
+
 import Attribute from '../global/Attribute.vue'
 import GenderDistribution from '../global/GenderDistribution.vue'
 import PillType from '../global/PillType.vue'
 import Title from '../global/Title.vue'
-import type { Pokemon } from '@/types/types'
-import { calculatePokemonWeaknesses } from '@/utils/pokemon-weaknesses'
 
 const props = defineProps<{
   pokemon: Pokemon

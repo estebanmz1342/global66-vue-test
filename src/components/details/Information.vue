@@ -99,7 +99,7 @@ const weaknesses = computed(() =>
 }
 
 .main__number {
-  font-family: Poppins;
+  font-family: var(--typography);
   font-weight: 600;
   font-style: SemiBold;
   font-size: 1.125rem;
@@ -109,7 +109,7 @@ const weaknesses = computed(() =>
 }
 
 .main__description {
-  font-family: Poppins;
+  font-family: var(--typography);
   font-weight: 400;
   line-height: 100%;
   letter-spacing: 0%;
@@ -148,7 +148,7 @@ const weaknesses = computed(() =>
 }
 
 .weaknesses-title {
-  font-family: Poppins;
+  font-family: var(--typography);
   font-weight: 600;
   font-size: 1.125rem;
 }

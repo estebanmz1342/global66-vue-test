@@ -133,7 +133,7 @@ const goToDetails = (name: string) => {
   width: 100%;
 }
 .card-body__name {
-  font-family: Poppins;
+  font-family: var(--typography);
   font-weight: 600;
   font-style: SemiBold;
   font-size: 21px;
@@ -144,7 +144,7 @@ const goToDetails = (name: string) => {
 }
 
 .card-body__number {
-  font-family: Poppins;
+  font-family: var(--typography);
   font-weight: 600;
   font-style: SemiBold;
   font-size: 12px;

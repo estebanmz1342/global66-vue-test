@@ -11,7 +11,7 @@ defineProps<{
 
 <style scoped>
 .text {
-  font: Poppins;
+  font: var(--typography);
   line-height: 100%;
   letter-spacing: 0em;
   font-style: regular;

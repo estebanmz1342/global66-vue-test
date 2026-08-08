@@ -102,7 +102,7 @@ const searchValue = computed({
   outline: 0;
   background: transparent;
   color: #a9a9a9;
-  font-family: Poppins, sans-serif;
+  font-family: var(--typography), sans-serif;
   font-size: 1rem;
   line-height: 1;
 }

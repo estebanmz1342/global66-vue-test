@@ -8,6 +8,7 @@ import SearchAndFilter from '@/components/pokedex/SearchAndFilter.vue'
 import Slider from '../components/onboarding/Slider.vue'
 
 const {
+  applyTypeFilter,
   finishOnboarding,
   handleSearch,
   isOnboardingFinished,
@@ -15,6 +16,7 @@ const {
   isLoadingMore,
   loadMorePokemons,
   pokemons,
+  selectedTypes,
   searchValue,
   fetchPokemons,
   clearSearchTimer,
@@ -34,7 +36,12 @@ onBeforeUnmount(() => {
     <Slider @finish="finishOnboarding" />
   </div>
   <div v-else class="pokedex">
-    <SearchAndFilter v-model="searchValue" @search="handleSearch" />
+    <SearchAndFilter
+      v-model="searchValue"
+      :selected-types="selectedTypes"
+      @search="handleSearch"
+      @apply-filter="applyTypeFilter"
+    />
     <List
       :pokemons="pokemons"
       :show-load-more="true"

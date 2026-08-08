@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
+import { usePokemonSpeciesApi } from '@/api/composables/usePokemonSpeciesApi'
 import type { Pokemon } from '@/types/types'
 import { calculatePokemonWeaknesses } from '@/utils/pokemon-weaknesses'
 
@@ -14,11 +15,38 @@ const props = defineProps<{
 }>()
 
 const pokemon = computed(() => props.pokemon)
+const pokemonSpeciesApi = usePokemonSpeciesApi()
 const description = ref<string>('')
 const category = ref<string>('-')
 const femalePercentage = ref<number | undefined>()
 const weaknesses = computed(() =>
   calculatePokemonWeaknesses(pokemon.value.types),
+)
+
+const loadSpeciesDetails = async (name: string) => {
+  description.value = ''
+  category.value = '-'
+  femalePercentage.value = undefined
+
+  try {
+    const speciesDetails = await pokemonSpeciesApi.getPokemonSpecies(name)
+
+    description.value = speciesDetails.description
+    category.value = speciesDetails.category || '-'
+    femalePercentage.value = speciesDetails.femalePercentage
+  } catch (error) {
+    console.error('Error fetching pokemon species details:', error)
+  }
+}
+
+watch(
+  () => pokemon.value.name,
+  (name) => {
+    void loadSpeciesDetails(name)
+  },
+  {
+    immediate: true,
+  },
 )
 </script>
 

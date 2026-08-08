@@ -1,5 +1,6 @@
-import apiClient from '../apiClient'
 import { useGlobalStore } from '@/store/global.store'
+
+import apiClient from '../apiClient'
 
 let activeRequests = 0
 

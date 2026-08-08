@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
 import Error from '@/components/pokedex/Error.vue'
-import Pokedex from '@/pages/Pokedex.vue'
-import Favorites from '@/pages/Favorites.vue'
-import Regions from '@/pages/Regions.vue'
 import Details from '@/pages/[name]/Details.vue'
+import Favorites from '@/pages/Favorites.vue'
+import Pokedex from '@/pages/Pokedex.vue'
 import Profile from '@/pages/Profile.vue'
+import Regions from '@/pages/Regions.vue'
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

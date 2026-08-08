@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
+
 import { getTypeInfo } from './hook/TYPES'
 
 const props = defineProps<{
@@ -48,7 +49,7 @@ const boxStyle = computed(() => ({
 }
 
 .type-name {
-  font-family: Poppins;
+  font-family: var(--typography);
   font-weight: 500;
   font-size: 0.688rem;
   line-height: 100%;

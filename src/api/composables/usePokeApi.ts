@@ -3,6 +3,7 @@ import {
   mapPokemonListResponse,
 } from '@/mappers/pokemon.mapper'
 import type { Pokemon } from '@/types/types'
+
 import { useServiceApi } from './useServiceApi'
 
 type PokemonBatch = {

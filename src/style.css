@@ -7,7 +7,7 @@
   --bg: #fff;
 
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: Poppins;
+  --typography: Poppins;
   --mono: ui-monospace, Consolas, monospace;
 
   font: 1rem;
@@ -31,12 +31,12 @@ body {
 
 h1,
 h2 {
-  font-family: var(--heading);
+  font-family: var(--typography);
   font-weight: 500;
   color: var(--text-h);
   margin: 0;
 }
 p {
-  font-family: var(--heading);
+  font-family: var(--typography);
   margin: 0;
 }

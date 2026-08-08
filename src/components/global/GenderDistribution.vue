@@ -37,7 +37,11 @@ const formatPercent = (value: number) => percentFormatter.format(value)
       {{ title }}
     </h2>
 
-    <div class="gender-distribution__bar" :style="barStyle" role="presentation" />
+    <div
+      class="gender-distribution__bar"
+      :style="barStyle"
+      role="presentation"
+    />
 
     <div class="gender-distribution__stats">
       <p class="gender-distribution__stat gender-distribution__stat--male">
@@ -62,7 +66,7 @@ const formatPercent = (value: number) => percentFormatter.format(value)
 }
 
 .gender-distribution__title {
-  font-family: var(--heading);
+  font-family: var(--typography);
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -88,7 +92,7 @@ const formatPercent = (value: number) => percentFormatter.format(value)
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-family: var(--heading);
+  font-family: var(--typography);
   font-size: 1rem;
   font-weight: 500;
   color: #4a4a4a;

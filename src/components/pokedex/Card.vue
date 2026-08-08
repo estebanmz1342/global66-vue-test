@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+
+import { useFavoritesStore } from '@/store/favorites.store'
+
 import type { Pokemon } from '../../types/types'
 import { getTypeInfo } from '../global/hook/TYPES'
 import PillType from '../global/PillType.vue'
-import { useFavoritesStore } from '@/store/favorites.store'
-import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   pokemon: Pokemon
@@ -133,7 +135,7 @@ const goToDetails = (name: string) => {
   width: 100%;
 }
 .card-body__name {
-  font-family: Poppins;
+  font-family: var(--typography);
   font-weight: 600;
   font-style: SemiBold;
   font-size: 21px;
@@ -144,7 +146,7 @@ const goToDetails = (name: string) => {
 }
 
 .card-body__number {
-  font-family: Poppins;
+  font-family: var(--typography);
   font-weight: 600;
   font-style: SemiBold;
   font-size: 12px;

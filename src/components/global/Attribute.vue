@@ -33,7 +33,7 @@ defineProps<{
 }
 
 .attribute-label__text {
-  font-family: Poppins;
+  font-family: var(--typography);
   font-weight: 400;
   font-size: 0.75rem;
   line-height: 100%;
@@ -43,7 +43,7 @@ defineProps<{
   background-color: white;
   padding: 0.75rem 1.125rem;
   border: 1px solid #a9a9a9;
-  font-family: Poppins;
+  font-family: var(--typography);
   font-weight: 600;
   font-size: 0.875rem;
   color: #08060d;

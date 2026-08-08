@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import errorImage from '@/assets/magikarp.svg'
-import Title from '../global/Title.vue'
-import Text from '../global/Text.vue'
+
 import Button from '../global/Button.vue'
+import Text from '../global/Text.vue'
+import Title from '../global/Title.vue'
 </script>
 
 <template>

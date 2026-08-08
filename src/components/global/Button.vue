@@ -33,7 +33,7 @@ defineEmits<{
 .button {
   width: 20.5rem;
   height: 3rem;
-  font-family: Poppins;
+  font-family: var(--typography);
   font-weight: 600;
   line-height: 1.5rem;
   letter-spacing: 0em;

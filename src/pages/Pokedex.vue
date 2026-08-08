@@ -1,9 +1,11 @@
 <script lang="ts" setup>
+import { onBeforeUnmount, onMounted } from 'vue'
+
+import { usePokedex } from '@/components/pokedex/hooks/usePokedex'
 import List from '@/components/pokedex/List.vue'
 import SearchAndFilter from '@/components/pokedex/SearchAndFilter.vue'
+
 import Slider from '../components/onboarding/Slider.vue'
-import { usePokedex } from '@/components/pokedex/hooks/usePokedex'
-import { onBeforeUnmount, onMounted } from 'vue'
 
 const {
   finishOnboarding,

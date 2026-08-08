@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 
-import Title from '@/components/global/Title.vue'
-import { useFavoritesStore } from '@/store/favorites.store'
-import List from '@/components/pokedex/List.vue'
 import EmptyState from '@/components/favorites/EmptyState.vue'
+import Title from '@/components/global/Title.vue'
+import List from '@/components/pokedex/List.vue'
+import { useFavoritesStore } from '@/store/favorites.store'
 
 const favoritesStore = useFavoritesStore()
 

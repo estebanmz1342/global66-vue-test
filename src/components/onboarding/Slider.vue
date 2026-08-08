@@ -3,8 +3,8 @@ import { computed, ref } from 'vue'
 
 import OnboardingImg1 from '../../assets/onboarding-1.svg'
 import OnboardingImg2 from '../../assets/onboarding-2.svg'
-import Slide from './Slide.vue'
 import Button from '../global/Button.vue'
+import Slide from './Slide.vue'
 
 type SlideItem = {
   image: string

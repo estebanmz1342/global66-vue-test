@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import { useFavoritesStore } from '@/store/favorites.store'
 import { computed } from 'vue'
-import { getTypeInfo } from '../global/hook/TYPES'
+
+import { useFavoritesStore } from '@/store/favorites.store'
 import type { Pokemon } from '@/types/types'
+
+import { getTypeInfo } from '../global/hook/TYPES'
 
 const props = defineProps<{
   pokemon: Pokemon

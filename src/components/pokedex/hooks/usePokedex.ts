@@ -50,8 +50,11 @@ export const usePokedex = () => {
     currentOffset.value = offset
 
     try {
-      const { pokemons: fetchedPokemons, hasMore, nextOffset } =
-        await pokeApi.getPokemonBatch(limit, offset)
+      const {
+        pokemons: fetchedPokemons,
+        hasMore,
+        nextOffset,
+      } = await pokeApi.getPokemonBatch(limit, offset)
       initialPokemons.value = fetchedPokemons
       pokemons.value = fetchedPokemons
       hasMorePokemons.value = hasMore
@@ -76,12 +79,16 @@ export const usePokedex = () => {
     isLoadingMore.value = true
 
     try {
-      const { pokemons: fetchedPokemons, hasMore, nextOffset } =
-        await pokeApi.getPokemonBatch(limit, currentOffset.value)
+      const {
+        pokemons: fetchedPokemons,
+        hasMore,
+        nextOffset,
+      } = await pokeApi.getPokemonBatch(limit, currentOffset.value)
 
       initialPokemons.value = [...initialPokemons.value, ...fetchedPokemons]
       hasMorePokemons.value = hasMore
-      currentOffset.value = nextOffset ?? currentOffset.value + fetchedPokemons.length
+      currentOffset.value =
+        nextOffset ?? currentOffset.value + fetchedPokemons.length
 
       if (searchValue.value.trim().length >= MIN_SEARCH_LENGTH) {
         await getPokemonByName(searchValue.value)
